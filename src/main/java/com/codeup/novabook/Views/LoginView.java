@@ -130,11 +130,25 @@ public class LoginView {
         Label librarianInfo = new Label("• librarian : librarian");
         librarianInfo.setStyle("-fx-text-fill: #333; -fx-font-size: 11px;");
         
-        infoSection.getChildren().addAll(infoTitle, adminTitle, adminInfo, libTitle, librarianInfo);
+        // Partner account
+        Label partnerTitle = new Label("🤝 Partner/Socio (Can Request Loans):");
+        partnerTitle.setStyle("-fx-font-weight: bold; -fx-text-fill: #FF5722; -fx-font-size: 12px;");
+        
+        Label partnerInfo = new Label("• socio : socio123");
+        partnerInfo.setStyle("-fx-text-fill: #333; -fx-font-size: 11px;");
+        
+        // User account
+        Label userTitle = new Label("📖 User (Catalog View Only):");
+        userTitle.setStyle("-fx-font-weight: bold; -fx-text-fill: #3F51B5; -fx-font-size: 12px;");
+        
+        Label userInfo = new Label("• usuario : usuario123");
+        userInfo.setStyle("-fx-text-fill: #333; -fx-font-size: 11px;");
+        
+        infoSection.getChildren().addAll(infoTitle, adminTitle, adminInfo, libTitle, librarianInfo, partnerTitle, partnerInfo, userTitle, userInfo);
         
         root.getChildren().addAll(titleSection, formSection, infoSection);
         
-        scene = new Scene(root, 420, 580);
+        scene = new Scene(root, 450, 650);
     }
     
     private void setupEventHandlers() {
@@ -156,10 +170,39 @@ public class LoginView {
         
         String userRole = controller.login(email, password);
         if (userRole != null) {
-            // Login successful, redirect to main view with role
-            MainView mainView = new MainView(primaryStage, userRole);
-            primaryStage.setScene(mainView.getScene());
-            primaryStage.setTitle("NovaBook - Library Management System");
+            // Login successful, redirect based on user role
+            switch (userRole) {
+                case "Socio":
+                    PartnerDashboardView partnerDashboard = new PartnerDashboardView(primaryStage, userRole);
+                    primaryStage.setScene(partnerDashboard.getScene());
+                    primaryStage.setTitle("NovaBook - Partner Dashboard");
+                    break;
+                    
+                case "Usuario":
+                    UserDashboardView userDashboard = new UserDashboardView(primaryStage, userRole);
+                    primaryStage.setScene(userDashboard.getScene());
+                    primaryStage.setTitle("NovaBook - Library Catalog");
+                    break;
+                    
+                case "Administrator":
+                    AdminDashboardView adminDashboard = new AdminDashboardView(primaryStage, userRole);
+                    primaryStage.setScene(adminDashboard.getScene());
+                    primaryStage.setTitle("NovaBook - Administrator Dashboard");
+                    break;
+                    
+                case "Librarian":
+                    LibrarianDashboardView librarianDashboard = new LibrarianDashboardView(primaryStage, userRole);
+                    primaryStage.setScene(librarianDashboard.getScene());
+                    primaryStage.setTitle("NovaBook - Librarian Dashboard");
+                    break;
+                    
+                default:
+                    // Fallback to main view for any other roles
+                    MainView mainView = new MainView(primaryStage, userRole);
+                    primaryStage.setScene(mainView.getScene());
+                    primaryStage.setTitle("NovaBook - Library Management System");
+                    break;
+            }
         } else {
             lblError.setText("Invalid email or password");
             txtPassword.clear();
