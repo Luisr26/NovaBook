@@ -190,17 +190,36 @@ DELIMITER ;
 -- Insertar roles básicos
 INSERT IGNORE INTO Rol (nombre, descripcion) VALUES 
 ('Administrador', 'Acceso completo al sistema'),
-('Bibliotecario', 'Acceso limitado, sin gestión de usuarios');
+('Bibliotecario', 'Acceso limitado, sin gestión de usuarios'),
+('Socio', 'Puede ver libros disponibles y realizar préstamos'),
+('Usuario', 'Solo puede ver el catálogo de libros');
 
--- Insertar usuario administrador por defecto (password: admin123)
+-- Insertar usuarios por defecto
 INSERT IGNORE INTO Usuario (nombre, email, password, activo) VALUES 
-('Administrador del Sistema', 'admin@novabook.com', '$2a$10$N0VeR1ly4H4shY0urOwnS.k2qJz8UYKYjsB9k5K5l1J5j4J3S6B4C', TRUE);
+('Administrador del Sistema', 'admin@novabook.com', 'admin', TRUE),
+('Bibliotecario Principal', 'librarian@novabook.com', 'librarian', TRUE),
+('Juan Pérez - Socio', 'socio@novabook.com', 'socio123', TRUE),
+('María García - Usuario', 'usuario@novabook.com', 'usuario123', TRUE);
 
--- Asignar rol de administrador al usuario por defecto
+-- Asignar roles a usuarios
 INSERT IGNORE INTO Usuario_Rol (usuario_id, rol_id) 
-SELECT u.id, r.id 
-FROM Usuario u, Rol r 
-WHERE u.email = 'admin@novabook.com' AND r.nombre = 'Administrador';
+SELECT u.id, r.id FROM Usuario u, Rol r WHERE u.email = 'admin@novabook.com' AND r.nombre = 'Administrador';
+
+INSERT IGNORE INTO Usuario_Rol (usuario_id, rol_id) 
+SELECT u.id, r.id FROM Usuario u, Rol r WHERE u.email = 'librarian@novabook.com' AND r.nombre = 'Bibliotecario';
+
+INSERT IGNORE INTO Usuario_Rol (usuario_id, rol_id) 
+SELECT u.id, r.id FROM Usuario u, Rol r WHERE u.email = 'socio@novabook.com' AND r.nombre = 'Socio';
+
+INSERT IGNORE INTO Usuario_Rol (usuario_id, rol_id) 
+SELECT u.id, r.id FROM Usuario u, Rol r WHERE u.email = 'usuario@novabook.com' AND r.nombre = 'Usuario';
+
+-- Insertar algunos socios de ejemplo
+INSERT IGNORE INTO Socio (nombre, direccion, telefono, email, activo) VALUES
+('Juan Pérez', 'Calle 123 #45-67', '3001234567', 'juan.perez@email.com', TRUE),
+('Ana López', 'Carrera 89 #12-34', '3009876543', 'ana.lopez@email.com', TRUE),
+('Carlos Rodríguez', 'Avenida 56 #78-90', '3005551234', 'carlos.rodriguez@email.com', TRUE),
+('Laura Martínez', 'Calle 34 #56-78', '3007890123', 'laura.martinez@email.com', FALSE);
 
 -- ====== VISTAS ÚTILES ======
 
