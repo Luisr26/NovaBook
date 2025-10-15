@@ -38,18 +38,6 @@ public class MainView {
         this.controller = new MainController(primaryStage, userRole);
         this.loginController = new LoginController(primaryStage);
         
-        // Redirect non-staff roles to their appropriate dashboards
-        if ("Socio".equals(userRole)) {
-            PartnerDashboardView partnerDashboard = new PartnerDashboardView(primaryStage, userRole);
-            primaryStage.setScene(partnerDashboard.getScene());
-            primaryStage.setTitle("NovaBook - Partner Dashboard");
-            return;
-        } else if ("Usuario".equals(userRole)) {
-            UserDashboardView userDashboard = new UserDashboardView(primaryStage, userRole);
-            primaryStage.setScene(userDashboard.getScene());
-            primaryStage.setTitle("NovaBook - Library Catalog");
-            return;
-        }
         
         // For Administrator and Librarian roles, show the main menu
         initializeComponents();

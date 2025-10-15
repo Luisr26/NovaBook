@@ -251,9 +251,21 @@ public class PartnersView {
     }
     
     private void goBack() {
-        MainView mainView = new MainView(primaryStage, userRole);
-        primaryStage.setScene(mainView.getScene());
-        primaryStage.setTitle("NovaBook - Library Management System");
+        // Redirect to appropriate dashboard based on user role
+        if ("Administrator".equals(userRole)) {
+            AdminDashboardView adminDashboard = new AdminDashboardView(primaryStage, userRole);
+            primaryStage.setScene(adminDashboard.getScene());
+            primaryStage.setTitle("NovaBook - Administrator Dashboard");
+        } else if ("Librarian".equals(userRole)) {
+            LibrarianDashboardView librarianDashboard = new LibrarianDashboardView(primaryStage, userRole);
+            primaryStage.setScene(librarianDashboard.getScene());
+            primaryStage.setTitle("NovaBook - Librarian Dashboard");
+        } else {
+            // Fallback to MainView
+            MainView mainView = new MainView(primaryStage, userRole);
+            primaryStage.setScene(mainView.getScene());
+            primaryStage.setTitle("NovaBook - Library Management System");
+        }
     }
     
     private void showError(String title, String message) {
